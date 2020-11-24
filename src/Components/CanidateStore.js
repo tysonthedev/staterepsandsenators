@@ -21,15 +21,16 @@ class CanidateStore {
       {
         await fetch("http://localhost:4000/senators/" + this.selectedStateAbr)
         .then(response =>  response.json())
-        .then(data => this.canidatesInfo = data["results"]);
+        .then(data => this.canidatesInfo = data["results"])
+        .catch((errorMessage) => alert(errorMessage));
       }
       else if(!this.senatorSelected)
       {
         await fetch("http://localhost:4000/representatives/" + this.selectedStateAbr)
         .then(response =>  response.json())
-        .then(data => this.canidatesInfo = data["results"]);
+        .then(data => this.canidatesInfo = data["results"])
+        .catch((errorMessage) => alert(errorMessage));
       }
-      this.displayedSenatorSelected = this.senatorSelected
   }
   }
 

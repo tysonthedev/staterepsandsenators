@@ -35,7 +35,7 @@ class CanidateList extends React.Component {
             <div id="canidateListParent">
                 <div className="label" id="canidateListLabel">      
                     <p>List / </p>
-                    <p id="selectedRepOrSenator">{this.props.senatorSelected == null ? "sdfg" : this.props.senatorSelected ? "Senators": "Representatives"}</p>
+                    <p id="selectedRepOrSenator">{this.props.senatorSelected == null ? "" : this.props.senatorSelected ? "Senators": "Representatives"}</p>
                 </div>
                 <div id="canidateListItemLabel">
                     <CanidateListItem
