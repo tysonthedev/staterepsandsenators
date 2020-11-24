@@ -1,0 +1,10 @@
+#repAndSenatorFilters {
+    display: flex;
+    flex-direction: row;
+  }
+  #repAndSenatorFilters .filterDropdownList {
+    width:300px;
+  }
+  #repAndSenatorFilters .filterButton {
+    width:100px;
+  }
