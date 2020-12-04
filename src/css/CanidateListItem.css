@@ -1,12 +1,12 @@
 .canidateListItem {
-    display:flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border-bottom: solid darkgray 1px;
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-  .canidateListItem p{
-    text-align: left;
-    width:200px;
-  }
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border-bottom: solid darkgray 1px;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+.canidateListItem p {
+	text-align: left;
+	width: 200px;
+}

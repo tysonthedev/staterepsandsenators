@@ -1,17 +1,16 @@
-
 #canidateListAndInfoDivider {
-    display: flex;
-    flex-direction: row;
-    height: 400px;
-  }
-  .title {
-    color:deepskyblue;
-    font-size: 16pt;
-    font-weight: bold;
-  }
-  .label {
-    display: flex;
-    flex-direction: row;
-    white-space: pre;
-    font-size: 16pt;
+	display: flex;
+	flex-direction: row;
+	height: 400px;
+}
+.title {
+	color: deepskyblue;
+	font-size: 16pt;
+	font-weight: bold;
+}
+.label {
+	display: flex;
+	flex-direction: row;
+	white-space: pre;
+	font-size: 16pt;
 }

@@ -1,16 +1,14 @@
-#canidateListParent{
-    min-width: 500px;
-    display: flex;
-    flex-direction: column;
+#canidateListParent {
+	min-width: 500px;
+	display: flex;
+	flex-direction: column;
 }
 #canidateListItemLabel .canidateListItem {
-    background-color:whitesmoke
-  }
-#canidateList{
-    overflow-y: overlay;
+	background-color: whitesmoke;
 }
-
-#selectedRepOrSenator
-{
-    color:deepskyblue;
+#canidateList {
+	overflow-y: overlay;
+}
+#selectedRepOrSenator {
+	color: deepskyblue;
 }
