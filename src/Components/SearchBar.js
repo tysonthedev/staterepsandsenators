@@ -68,23 +68,26 @@ const theObserver = new observer(
 			};
 			this.state = {
 				selectedStateAbr: '',
-				senatorSelected: false,
+				senatorSelected: null,
 			};
 		}
-		setSenatorSelected(stringSelection) {
+		async setSenatorSelected(stringSelection) {
 			if (stringSelection === 'Senator') {
 				this.setState({ senatorSelected: true });
+				await this.getResults(true, this.state.selectedStateAbr);
 			} else {
 				this.setState({ senatorSelected: false });
+				await this.getResults(false, this.state.selectedStateAbr);
 			}
 		}
-		setStateAbr(stringAbr) {
+		async setStateAbr(stringAbr) {
 			this.setState({ selectedStateAbr: stringAbr });
+			await this.getResults(this.state.senatorSelected, stringAbr);
 		}
-		async getResults() {
-			await canidateStore.updateCanidates(this.state.senatorSelected, this.state.selectedStateAbr);
+		async getResults(isSenator, stateAbr) {
+			await canidateStore.updateCanidates(isSenator, stateAbr);
 			this.props.updateSelectedIndexOnParent(0);
-			this.props.updateSenatorSelection(this.state.senatorSelected);
+			this.props.updateSenatorSelection(isSenator);
 		}
 		render() {
 			return (
@@ -109,7 +112,7 @@ const theObserver = new observer(
 						variant='primary'
 						size='lg'
 						onClick={async () => {
-							await this.getResults();
+							await this.getResults(this.state.senatorSelected, this.state.stateAbr);
 						}}
 					>
 						GO
