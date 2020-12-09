@@ -4,6 +4,7 @@ import canidateStore from '../DataStores/CanidateStore';
 import { DropdownList } from 'react-widgets';
 import { Button } from 'react-bootstrap';
 import '../css/SearchBar.css';
+import PropTypes from 'prop-types';
 
 const stateList = [
 	{ stateDisplay: 'Alabama - AL', stateAbr: 'AL' },
@@ -58,68 +59,68 @@ const stateList = [
 	{ stateDisplay: 'Wyoming - WY', stateAbr: 'WY' },
 ];
 
-const theObserver = new observer(
-	class SearchBar extends React.Component {
-		constructor() {
-			super();
-			this.props = {
-				updateSelectedIndexOnParent: {},
-				updateSenatorSelection: {},
-			};
-			this.state = {
-				selectedStateAbr: '',
-				senatorSelected: null,
-			};
-		}
-		async setSenatorSelected(stringSelection) {
-			if (stringSelection === 'Senator') {
-				this.setState({ senatorSelected: true });
-				await this.getResults(true, this.state.selectedStateAbr);
-			} else {
-				this.setState({ senatorSelected: false });
-				await this.getResults(false, this.state.selectedStateAbr);
-			}
-		}
-		async setStateAbr(stringAbr) {
-			this.setState({ selectedStateAbr: stringAbr });
-			await this.getResults(this.state.senatorSelected, stringAbr);
-		}
-		async getResults(isSenator, stateAbr) {
-			await canidateStore.updateCanidates(isSenator, stateAbr);
-			this.props.updateSelectedIndexOnParent(0);
-			this.props.updateSenatorSelection(isSenator);
-		}
-		render() {
-			return (
-				<div id='repAndSenatorFilters'>
-					<DropdownList
-						className='filterDropdownList'
-						data={['Representative', 'Senator']}
-						defaultValue='Representative or Senator?'
-						onChange={(e) => this.setSenatorSelected(e)}
-					/>
-					<DropdownList
-						className='filterDropdownList'
-						data={stateList}
-						valueField='stateAbr'
-						textField='stateDisplay'
-						defaultValue='Which State?'
-						onChange={(e) => this.setStateAbr(e['stateAbr'])}
-						filter='contains'
-					/>
-					<Button
-						className='getResultsButton'
-						variant='primary'
-						size='lg'
-						onClick={async () => {
-							await this.getResults(this.state.senatorSelected, this.state.stateAbr);
-						}}
-					>
-						GO
-					</Button>
-				</div>
-			);
+class SearchBar extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			selectedStateAbr: '',
+			senatorSelected: null,
+		};
+	}
+	async setSenatorSelected(stringSelection) {
+		if (stringSelection === 'Senator') {
+			this.setState({ senatorSelected: true });
+			await this.getResults(true, this.state.selectedStateAbr);
+		} else {
+			this.setState({ senatorSelected: false });
+			await this.getResults(false, this.state.selectedStateAbr);
 		}
 	}
-);
-export default theObserver;
+	async setStateAbr(stringAbr) {
+		this.setState({ selectedStateAbr: stringAbr });
+		await this.getResults(this.state.senatorSelected, stringAbr);
+	}
+	async getResults(isSenator, stateAbr) {
+		await canidateStore.updateCanidates(isSenator, stateAbr);
+		this.props.updateSelectedIndexOnParent(0);
+		this.props.updateSenatorSelection(isSenator);
+	}
+	render() {
+		return (
+			<div id='repAndSenatorFilters'>
+				<DropdownList
+					className='filterDropdownList'
+					data={['Representative', 'Senator']}
+					defaultValue='Representative or Senator?'
+					onChange={(e) => this.setSenatorSelected(e)}
+				/>
+				<DropdownList
+					className='filterDropdownList'
+					data={stateList}
+					valueField='stateAbr'
+					textField='stateDisplay'
+					defaultValue='Which State?'
+					onChange={(e) => this.setStateAbr(e['stateAbr'])}
+					filter='contains'
+				/>
+				<Button
+					className='getResultsButton'
+					variant='primary'
+					size='lg'
+					onClick={async () => {
+						await this.getResults(this.state.senatorSelected, this.state.stateAbr);
+					}}
+				>
+					GO
+				</Button>
+			</div>
+		);
+	}
+}
+
+SearchBar.PropTypes = {
+	updateSelectedIndexOnParent: PropTypes.func.isRequired,
+	updateSenatorSelection: PropTypes.func.isRequired,
+};
+
+export default new observer(SearchBar);
