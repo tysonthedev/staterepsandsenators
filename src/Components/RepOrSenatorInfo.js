@@ -1,14 +1,9 @@
 import React from 'react';
 import '../css/RepOrSenatorInfo.css';
 import canidateStore from '../DataStores/CanidateStore';
+import PropTypes from 'prop-types';
 
 class RepOrSenatorInfo extends React.Component {
-	constructor() {
-		super();
-		this.props = {
-			selectedCanidateIndex: 0,
-		};
-	}
 	getSelectedRepData() {
 		if (canidateStore.canidatesInfo.length >= this.props.selectedCanidateIndex - 1 && canidateStore.canidatesInfo.length > 0) {
 			return {
@@ -52,5 +47,8 @@ class RepOrSenatorInfo extends React.Component {
 		);
 	}
 }
+RepOrSenatorInfo.propTypes = {
+	selectedCanidateIndex: PropTypes.number.isRequired,
+};
 
 export default RepOrSenatorInfo;

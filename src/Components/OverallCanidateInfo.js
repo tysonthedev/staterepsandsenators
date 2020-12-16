@@ -5,8 +5,8 @@ import RepOrSenatorInfo from './RepOrSenatorInfo';
 import '../css/OverallCanidateInfo.css';
 
 class OverallCanidateInfo extends React.Component {
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		this.state = {
 			senatorSelected: null,
 			selectedIndex: 0,
