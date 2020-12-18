@@ -1,29 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../css/CanidateListItem.css';
 import PropTypes, { func } from 'prop-types';
 
-class CanidateListItem extends React.Component {
-	onSelect() {
-		if (!this.props.isStatic && !this.props.selected) {
-			this.props.updateSelectedIndex(this.props.index);
+const CanidateListItem = (props) => {
+	const onSelect = () => {
+		if (!props.isStatic && !props.selected) {
+			props.updateSelectedIndex(props.index);
 		}
-	}
-	getStyle() {
-		if (!this.props.isStatic && this.props.selected) {
-			return { backgroundColor: this.props.selectedColor };
+	};
+	const getStyle = () => {
+		if (!props.isStatic && props.selected) {
+			return { backgroundColor: props.selectedColor };
 		} else {
 			return {};
 		}
-	}
-	render() {
-		return (
-			<div onClick={() => this.onSelect()} style={this.getStyle()} className='canidateListItem'>
-				<p>{this.props.name}</p>
-				<p>{this.props.partyAffiliation}</p>
-			</div>
-		);
-	}
-}
+	};
+	return (
+		<div onClick={() => onSelect()} style={getStyle()} className='canidateListItem'>
+			<p>{props.name}</p>
+			<p>{props.partyAffiliation}</p>
+		</div>
+	);
+};
 CanidateListItem.propTypes = {
 	name: PropTypes.string,
 	partyAffiliation: PropTypes.string,

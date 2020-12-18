@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import canidateStore from '../DataStores/CanidateStore';
 import '../css/SearchBar.css';
@@ -59,63 +59,57 @@ const stateList = [
 	{ stateDisplay: 'Wyoming - WY', stateAbr: 'WY' },
 ];
 
-class SearchBar extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			selectedStateAbr: '',
-			senatorSelected: null,
-		};
-	}
-	async setSenatorSelected(stringSelection) {
+const SearchBar = (props) => {
+	const [selectedStateAbr, setSelectedStateAbr] = useState('');
+	const [senatorSelected, setSenatorSelected] = useState(null);
+
+	const getSenatorSelected = async (stringSelection) => {
 		if (stringSelection === 'Senator') {
-			this.setState({ senatorSelected: true });
-			await this.getResults(true, this.state.selectedStateAbr);
+			await getResults(true, selectedStateAbr);
+			return true;
 		} else if (stringSelection === 'Representative') {
-			this.setState({ senatorSelected: false });
-			await this.getResults(false, this.state.selectedStateAbr);
+			await getResults(false, selectedStateAbr);
+			return false;
 		} else {
-			this.setState({ senatorSelected: null });
-			await this.getResults(null, this.state.selectedStateAbr);
+			await getResults(null, selectedStateAbr);
+			return null;
 		}
-	}
-	async setStateAbr(stringAbr) {
+	};
+	const getSelectedStateAbr = async (stringAbr) => {
 		if (stringAbr == null) {
-			this.setState({ selectedStateAbr: null });
-			await this.getResults(this.state.senatorSelected, '');
+			await getResults(senatorSelected, '');
+			return null;
 		} else if ('stateAbr' in stringAbr) {
-			this.setState({ selectedStateAbr: stringAbr['stateAbr'] });
-			await this.getResults(this.state.senatorSelected, stringAbr['stateAbr']);
+			await getResults(senatorSelected, stringAbr['stateAbr']);
+			return stringAbr['stateAbr'];
 		}
-	}
-	async getResults(isSenator, stateAbr) {
+	};
+	const getResults = async (isSenator, stateAbr) => {
 		if (await canidateStore.updateCanidates(isSenator, stateAbr)) {
-			this.props.updateSelectedIndexOnParent(0);
-			this.props.updateSenatorSelection(isSenator);
+			props.updateSelectedIndexOnParent(0);
+			props.updateSenatorSelection(isSenator);
 		}
-	}
-	render() {
-		return (
-			<div id='repAndSenatorFilters'>
-				<Autocomplete
-					className='filterDropdownList'
-					autoSelect
-					onChange={(e, newValue) => this.setSenatorSelected(newValue)}
-					options={['Representative', 'Senator']}
-					renderInput={(params) => <TextField {...params} label='Senator Or Representative?' variant='outlined' />}
-				/>
-				<Autocomplete
-					className='filterDropdownList'
-					autoSelect
-					onChange={(e, newValue) => this.setStateAbr(newValue)}
-					options={stateList}
-					getOptionLabel={(option) => option.stateDisplay}
-					renderInput={(params) => <TextField {...params} label='Which State?' variant='outlined' />}
-				/>
-			</div>
-		);
-	}
-}
+	};
+	return (
+		<div id='repAndSenatorFilters'>
+			<Autocomplete
+				className='filterDropdownList'
+				autoSelect
+				onChange={async (e, newValue) => setSenatorSelected(await getSenatorSelected(newValue))}
+				options={['Representative', 'Senator']}
+				renderInput={(params) => <TextField {...params} label='Senator Or Representative?' variant='outlined' />}
+			/>
+			<Autocomplete
+				className='filterDropdownList'
+				autoSelect
+				onChange={async (e, newValue) => setSelectedStateAbr(await getSelectedStateAbr(newValue))}
+				options={stateList}
+				getOptionLabel={(option) => option.stateDisplay}
+				renderInput={(params) => <TextField {...params} label='Which State?' variant='outlined' />}
+			/>
+		</div>
+	);
+};
 
 SearchBar.propTypes = {
 	updateSelectedIndexOnParent: PropTypes.func.isRequired,

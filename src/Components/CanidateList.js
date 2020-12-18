@@ -5,17 +5,17 @@ import canidateStore from '../DataStores/CanidateStore';
 import '../css/CanidateList.css';
 import PropTypes from 'prop-types';
 
-class CanidateList extends React.Component {
-	getSelectedRepOrSenatorValue() {
-		if (this.props.senatorSelected == null) {
+const CanidateList = (props) => {
+	const getSelectedRepOrSenatorValue = () => {
+		if (props.senatorSelected == null) {
 			return '';
-		} else if (this.props.senatorSelected) {
+		} else if (props.senatorSelected) {
 			return 'Senators';
 		} else {
 			return 'Representatives';
 		}
-	}
-	canidates() {
+	};
+	const canidates = () => {
 		if (canidateStore.canidatesInfo == null) return;
 		return canidateStore.canidatesInfo.map((canidateInfo, index) => {
 			return (
@@ -25,37 +25,34 @@ class CanidateList extends React.Component {
 					index={index}
 					key={index}
 					selectedColor='deepskyblue'
-					selected={index === this.props.selectedIndex ? true : false}
+					selected={index === props.selectedIndex ? true : false}
 					updateSelectedIndex={
-						index !== this.props.selectedIndex
+						index !== props.selectedIndex
 							? (e) => {
-									this.props.updateSelectedIndexOnParent(e);
+									props.updateSelectedIndexOnParent(e);
 							  }
 							: () => {}
 					}
 				/>
 			);
 		});
-	}
-	render() {
-		return (
-			<div id='canidateListParent'>
-				<div className='label' id='canidateListLabel'>
-					<p>List / </p>
-					<p id='selectedRepOrSenator'>{this.getSelectedRepOrSenatorValue()}</p>
-				</div>
-				<div id='canidateListItemLabel'>
-					<CanidateListItem name='Name' partyAffiliation='Party' isStatic={true} />
-				</div>
-				<div id='canidateList'>{this.canidates()}</div>
+	};
+	return (
+		<div id='canidateListParent'>
+			<div className='label' id='canidateListLabel'>
+				<p>List / </p>
+				<p id='selectedRepOrSenator'>{getSelectedRepOrSenatorValue()}</p>
 			</div>
-		);
-	}
-}
+			<div id='canidateListItemLabel'>
+				<CanidateListItem name='Name' partyAffiliation='Party' isStatic={true} />
+			</div>
+			<div id='canidateList'>{canidates()}</div>
+		</div>
+	);
+};
 CanidateList.propTypes = {
 	updateSelectedIndexOnParent: PropTypes.func,
 	selectedIndex: PropTypes.number,
-	senatorSelected: PropTypes.bool,
 };
 CanidateList.defaultProps = {
 	updateSelectedIndexOnParent: {},
