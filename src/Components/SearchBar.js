@@ -5,6 +5,7 @@ import '../css/SearchBar.css';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { useSnackbar } from 'notistack';
 
 const stateList = [
 	{ stateDisplay: 'Alabama - AL', stateAbr: 'AL' },
@@ -60,8 +61,10 @@ const stateList = [
 ];
 
 const SearchBar = (props) => {
+	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 	const [selectedStateAbr, setSelectedStateAbr] = useState('');
 	const [senatorSelected, setSenatorSelected] = useState(null);
+	const [errorFlags, setErrorFlags] = useState([]);
 
 	const getSenatorSelected = async (stringSelection) => {
 		if (stringSelection === 'Senator') {
@@ -85,19 +88,37 @@ const SearchBar = (props) => {
 		}
 	};
 	const getResults = async (isSenator, stateAbr) => {
-		if (await canidateStore.updateCanidates(isSenator, stateAbr)) {
+		var success = await canidateStore.updateCanidates(isSenator, stateAbr);
+		if (success === true) {
 			props.updateSelectedIndexOnParent(0);
 			props.updateSenatorSelection(isSenator);
+			setErrorFlags([]);
+		} else {
+			//success will return with an array of strings that we need to display
+			closeSnackbar();
+			displayErrors(success);
+			setErrorFlags(success['flags']);
 		}
+	};
+	const isErrorFlagTrue = (nameOfFlag) => {
+		if (errorFlags.includes(nameOfFlag)) return true;
+		else return false;
+	};
+	const displayErrors = (errors) => {
+		errors['messages'].forEach((message) => {
+			enqueueSnackbar(message, { variant: 'error', anchorOrigin: { vertical: 'top', horizontal: 'center' } });
+		});
 	};
 	return (
 		<div id='repAndSenatorFilters'>
 			<Autocomplete
-				className='filterDropdownList'
+				className='filterDropdownList autoCompleteError'
 				autoSelect
 				onChange={async (e, newValue) => setSenatorSelected(await getSenatorSelected(newValue))}
 				options={['Representative', 'Senator']}
-				renderInput={(params) => <TextField {...params} label='Senator Or Representative?' variant='outlined' />}
+				renderInput={(params) => (
+					<TextField error={isErrorFlagTrue('senatorSelection')} {...params} label='Senator Or Representative?' variant='outlined' />
+				)}
 			/>
 			<Autocomplete
 				className='filterDropdownList'
@@ -105,7 +126,9 @@ const SearchBar = (props) => {
 				onChange={async (e, newValue) => setSelectedStateAbr(await getSelectedStateAbr(newValue))}
 				options={stateList}
 				getOptionLabel={(option) => option.stateDisplay}
-				renderInput={(params) => <TextField {...params} label='Which State?' variant='outlined' />}
+				renderInput={(params) => (
+					<TextField error={isErrorFlagTrue('stateSelection')} {...params} label='Which State?' variant='outlined' />
+				)}
 			/>
 		</div>
 	);
