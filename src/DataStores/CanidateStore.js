@@ -1,4 +1,5 @@
 import { action, makeObservable, observable } from 'mobx';
+import axios from 'axios';
 
 class CanidateStore {
 	canidatesInfo = [];
@@ -6,7 +7,12 @@ class CanidateStore {
 		makeObservable(this, {
 			canidatesInfo: observable,
 			updateCanidates: action,
+			updateCanidatesInfo: action,
 		});
+	}
+
+	updateCanidatesInfo(newCanidates) {
+		this.canidatesInfo = newCanidates;
 	}
 
 	async updateCanidates(senatorSelected, selectedStateAbr) {
@@ -23,14 +29,14 @@ class CanidateStore {
 			return errors;
 		} else if (senatorSelected) {
 			try {
-				this.canidatesInfo = (await (await fetch('http://localhost:4000/senators/' + selectedStateAbr)).json())['results'];
+				this.updateCanidatesInfo(await (await axios.get('http://localhost:4000/senators/' + selectedStateAbr)).data['results']);
 				return true;
 			} catch (error) {
 				errors['messages'].push('api errors(senators):' + error);
 			}
 		} else {
 			try {
-				this.canidatesInfo = (await (await fetch('http://localhost:4000/representatives/' + selectedStateAbr)).json())['results'];
+				this.updateCanidatesInfo(await (await axios.get('http://localhost:4000/representatives/' + selectedStateAbr)).data['results']);
 				return true;
 			} catch (error) {
 				errors['messages'].push('api error(representatives):' + error);
