@@ -32,7 +32,7 @@ class CanidateStore {
 				this.updateCanidatesInfo(await (await axios.get('http://localhost:4000/senators/' + selectedStateAbr)).data['results']);
 				return true;
 			} catch (error) {
-				errors['messages'].push('api errors(senators):' + error);
+				errors['messages'].push('api error(senators):' + error);
 			}
 		} else {
 			try {
