@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../css/CanidateListItem.css';
-import PropTypes, { func } from 'prop-types';
+import PropTypes from 'prop-types';
 
 const CanidateListItem = (props) => {
 	const onSelect = () => {
