@@ -1,7 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost:4000/';
+const apiUrl = 'http://127.0.0.1:4000/';
 
 class CanidateStore {
 	canidatesInfo = [];
