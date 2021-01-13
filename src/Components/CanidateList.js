@@ -20,8 +20,8 @@ const CanidateList = (props) => {
 		return canidateStore.canidatesInfo.map((canidateInfo, index) => {
 			return (
 				<CanidateListItem
-					name={canidateInfo['name']}
-					partyAffiliation={canidateInfo['party'][0]}
+					name={canidateInfo.name}
+					partyAffiliation={canidateInfo.party[0]}
 					index={index}
 					key={index}
 					selectedColor='deepskyblue'

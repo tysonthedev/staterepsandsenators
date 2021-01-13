@@ -83,8 +83,8 @@ const SearchBar = (props) => {
 			await getResults(senatorSelected, '');
 			return null;
 		} else if ('stateAbr' in stringAbr) {
-			await getResults(senatorSelected, stringAbr['stateAbr']);
-			return stringAbr['stateAbr'];
+			await getResults(senatorSelected, stringAbr.stateAbr);
+			return stringAbr.stateAbr;
 		}
 	};
 	const getResults = async (isSenator, stateAbr) => {
@@ -97,7 +97,7 @@ const SearchBar = (props) => {
 			//success will return with an array of strings that we need to display
 			closeSnackbar();
 			displayErrors(success);
-			setErrorFlags(success['flags']);
+			setErrorFlags(success.flags);
 		}
 	};
 	const isErrorFlagTrue = (nameOfFlag) => {
@@ -105,7 +105,7 @@ const SearchBar = (props) => {
 		else return false;
 	};
 	const displayErrors = (errors) => {
-		errors['messages'].forEach((message) => {
+		errors.messages.forEach((message) => {
 			enqueueSnackbar(message, { variant: 'error', anchorOrigin: { vertical: 'top', horizontal: 'center' } });
 		});
 	};

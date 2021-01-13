@@ -21,27 +21,29 @@ class CanidateStore {
 		var errors = { flags: [], messages: [] };
 		if (senatorSelected == null || selectedStateAbr === '' || selectedStateAbr == null) {
 			if (senatorSelected == null) {
-				errors['flags'].push('senatorSelection');
-				errors['messages'].push('You must select either senator or representative');
+				errors.flags.push('senatorSelection');
+				errors.messages.push('You must select either senator or representative');
 			}
 			if (selectedStateAbr == null || selectedStateAbr === '') {
-				errors['flags'].push('stateSelection');
-				errors['messages'].push('You must select a state');
+				errors.flags.push('stateSelection');
+				errors.messages.push('You must select a state');
 			}
 			return errors;
 		} else if (senatorSelected) {
 			try {
-				this.updateCanidatesInfo(await (await axios.get(`${apiUrl}senators/${selectedStateAbr}`)).data['results']);
+				const apiCall = await axios.get(`${apiUrl}senators/${selectedStateAbr}`);
+				this.updateCanidatesInfo(apiCall.data.results);
 				return true;
 			} catch (error) {
-				errors['messages'].push('api error(senators):' + error);
+				errors.messages.push('api error(senators):' + error);
 			}
 		} else {
 			try {
-				this.updateCanidatesInfo(await (await axios.get(`${apiUrl}representatives/${selectedStateAbr}`)).data['results']);
+				let apiCall = await axios.get(`${apiUrl}representatives/${selectedStateAbr}`);
+				this.updateCanidatesInfo(apiCall.data.results);
 				return true;
 			} catch (error) {
-				errors['messages'].push('api error(representatives):' + error);
+				errors.messages.push('api error(representatives):' + error);
 			}
 		}
 		return errors;
